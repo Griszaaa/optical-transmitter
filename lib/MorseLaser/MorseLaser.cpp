@@ -45,7 +45,7 @@ MorseLaser::MorseLaser(int laserPin, unsigned int dotLength) {
   _laserPin = laserPin;
   _dotLength = dotLength;
   pinMode(_laserPin, OUTPUT);
-  digitalWrite(_laserPin, LOW);  // Domyślnie dioda wyłączona
+  digitalWrite(_laserPin, HIGH);  // Domyślnie dioda włączona
 }
 
 // Funkcja do wysyłania tekstu jako kod Morse'a
@@ -63,17 +63,17 @@ void MorseLaser::setDotLength(unsigned int length) {
 
 // Funkcja do wysłania pojedynczej kropki
 void MorseLaser::sendDot() {
-  digitalWrite(_laserPin, HIGH);
-  delay(_dotLength);
   digitalWrite(_laserPin, LOW);
+  delay(_dotLength);
+  digitalWrite(_laserPin, HIGH);
   delay(_dotLength);  // Przerwa po kropce
 }
 
 // Funkcja do wysłania kreski
 void MorseLaser::sendDash() {
-  digitalWrite(_laserPin, HIGH);
-  delay(_dotLength * 3);
   digitalWrite(_laserPin, LOW);
+  delay(_dotLength * 3);
+  digitalWrite(_laserPin, HIGH);
   delay(_dotLength);  // Przerwa po kresce
 }
 
