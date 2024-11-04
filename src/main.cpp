@@ -9,7 +9,7 @@ const char* password = "12345678";  // Hasło WiFi
 WiFiServer server(80);  // Używamy serwera TCP na porcie 80
 
 // ***** KONFIGURACJA TRANSMISJI MORSE'A *****
-MorseLaser morse(LED_BUILTIN, 10);
+MorseLaser morse(D1, 10);
 
 // ***** KONFIGURACJA LCD *****
 #define rs D2
