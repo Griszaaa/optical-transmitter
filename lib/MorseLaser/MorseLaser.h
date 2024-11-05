@@ -1,14 +1,14 @@
-#ifndef MorseLaser_h
-#define MorseLaser_h
+#ifndef MORSE_LASER_H
+#define MORSE_LASER_H
 
 #include <Arduino.h>
 
 class MorseLaser {
-  public:
-    MorseLaser(int laserPin, unsigned int dotLength = 250);
+public:
+    MorseLaser(int laserPin, unsigned int dotLength = 50);
     void sendMorse(const String &text);
     void setDotLength(unsigned int length);
-  private:
+private:
     int _laserPin;
     unsigned int _dotLength;
     void sendDot();

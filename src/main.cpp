@@ -9,8 +9,8 @@ const char* password = "12345678";  // Hasło WiFi
 WiFiServer server(80);  // Używamy serwera TCP na porcie 80
 
 // ***** KONFIGURACJA TRANSMISJI MORSE'A *****
-MorseLaser morse(D1, 10);
-
+MorseLaser morseLaser(D1);
+              
 // ***** KONFIGURACJA LCD *****
 #define rs D2
 #define en D3
@@ -26,94 +26,92 @@ unsigned int scrollIndex = 0; // Aktualny indeks przewijania
 unsigned long previousMillis = 0; // Czas ostatniego przewinięcia
 const long scrollInterval = 450; // Interwał przewijania (450 ms)
 
-void setup() 
-{
-  // Uruchomienie servera w trybie Access Point
-  WiFi.softAP(ssid, password);  // Tryb Access Point
-  server.begin();
-  // LCD
-  lcd.begin(16, 2);
-  lcd.setCursor(0, 0);
-  lcd.clear();
+void setup() {
+    // Uruchomienie servera w trybie Access Point
+    WiFi.softAP(ssid, password);  // Tryb Access Point
+    server.begin();
 
-  // Wyświetlenie adresu IP Access Pointa
-  lcd.print("IP: ");
-  String ip = WiFi.softAPIP().toString();
-  ip.substring(0, 11);
-  lcd.print(ip);
-  
-  lcd.setCursor(0, 1);
-  lcd.print("Port: ");
-  lcd.print(server.port());
+    // LCD
+    lcd.begin(16, 2);
+    lcd.setCursor(0, 0);
+    lcd.clear();
+
+    // Wyświetlenie adresu IP Access Pointa
+    lcd.print("IP: ");
+    // String ip = WiFi.softAPIP().toString();
+    ip.substring(0, 11);
+    lcd.print(ip);
+    
+    lcd.setCursor(0, 1);
+    lcd.print("Port: ");
+    lcd.print(server.port());
 }
 
-void scrollText() 
-{
-  unsigned long currentMillis = millis(); // Aktualny czas
-  lcd.setCursor(0, 0);
-  lcd.print("Message:");
+void scrollText() {
+    unsigned long currentMillis = millis(); // Aktualny czas
+    lcd.setCursor(0, 0);
+    lcd.print("Message:");
 
-  if(messageToScroll.length() <= 16) 
-  {
-    lcd.setCursor(0, 1);
-    lcd.print(messageToScroll); // Jeżeli tekst krótszy niż 16 znaków - wyświetl bez przewijania
-  } 
-  else if(currentMillis - previousMillis >= scrollInterval) 
-  { 
-    previousMillis = currentMillis; // Zapisz czas przewinięcia
+    if(messageToScroll.length() <= 16) {
+        lcd.setCursor(0, 1);
+        lcd.print(messageToScroll); // Jeżeli tekst krótszy niż 16 znaków - wyświetl bez przewijania
+    } 
+    else if(currentMillis - previousMillis >= scrollInterval) { 
+        previousMillis = currentMillis; // Zapisz czas przewinięcia
     
-    lcd.setCursor(0, 1);
-    // Wyświetlanie odpowiedniego fragmentu wiadomości
-    lcd.print(messageToScroll.substring(scrollIndex, scrollIndex + 16)); 
+        lcd.setCursor(0, 1);
+        // Wyświetlanie odpowiedniego fragmentu wiadomości
+        lcd.print(messageToScroll.substring(scrollIndex, scrollIndex + 16)); 
     
-    scrollIndex++; // Przesuwanie indeksu
-    if(scrollIndex + 16 > messageToScroll.length()) 
-    {
-      scrollIndex = 0; // Wracamy na początek po dotarciu do końca
+        scrollIndex++; // Przesuwanie indeksu
+        if(scrollIndex + 16 > messageToScroll.length()) {
+        scrollIndex = 0; // Wracamy na początek po dotarciu do końca
     }
   }
 }
 
-void loop() 
-{
-  WiFiClient client = server.accept(); // Czekanie na klienta
-  if(client)
-  {
-    lcd.clear();
-    messageToScroll = "Connected";
-    scrollText();
-    bool sendingMorse = false; // Flaga sygnalizująca, czy trwa wysyłanie Morse'a
-
-    while(client.connected()) 
-    {
-      if(client.available()) 
-      {
-        String message = client.readStringUntil('\n'); // Odbieranie danych
-        message.trim(); // Usunięcie białych znaków na końcu wiadomości
-
-        // Wyczyszczenie LCD przed wyświetleniem nowej wiadomości
+void loop() {
+    WiFiClient client = server.accept(); // Czekanie na klienta
+    if(client) {
         lcd.clear();
-        
-        // Wyświetlanie wiadomości na LCD bez względu na transmisję Morse'a
-        if (message != "start" || message != "stop") { messageToScroll = message; }
-        scrollIndex = 0; // Zresetowanie indeksu przewijania
-        scrollText(); // Wyświetlenie wiadomości na LCD
+        messageToScroll = "Connected";
+        scrollText();
+        bool sendingMorse = false; // Flaga sygnalizująca, czy trwa wysyłanie Morse'a
 
-        if(message == "start") 
-        {
-          sendingMorse = true;
-          lcd.clear();  // Czyść LCD przed wyświetleniem nowej wiadomości
-          messageToScroll = "Start Morse TX"; // Wyświetl komunikat o starcie
-        } else if (message == "stop") {
-          sendingMorse = false;
-          lcd.clear();  // Czyść LCD przed wyświetleniem nowej wiadomości
-          messageToScroll = "Stop Morse TX"; // Wyświetl komunikat o zatrzymaniu
-        } else if (sendingMorse) {
-          // Jeżeli transmisja jest aktywna, wysyłaj Morse'a
-          morse.sendMorse(message); // Wyślij kod Morse'a dla wiadomości
+    while(client.connected()) {
+        if(client.available()) {
+            String message = client.readStringUntil('\n'); // Odbieranie danych
+            message.trim(); // Usunięcie białych znaków na końcu wiadomości
+
+            // Wyczyszczenie LCD przed wyświetleniem nowej wiadomości
+            lcd.clear();
+            
+            // Wyświetlanie wiadomości na LCD bez względu na transmisję Morse'a
+            if(message != "start" || message != "stop") messageToScroll = message;
+            scrollIndex = 0; // Zresetowanie indeksu przewijania
+            scrollText(); // Wyświetlenie wiadomości na LCD
+
+            if(message == "start") {
+
+                sendingMorse = true;
+                lcd.clear();  // Czyść LCD przed wyświetleniem nowej wiadomości
+                messageToScroll = "Start Morse TX"; // Wyświetl komunikat o starcie
+             morseLaser.sendMorse(message);
+
+            } else if (message == "stop") {
+
+                sendingMorse = false;
+                lcd.clear();  // Czyść LCD przed wyświetleniem nowej wiadomości
+                messageToScroll = "Stop Morse TX"; // Wyświetl komunikat o zatrzymaniu
+                morseLaser.sendMorse(message);
+          
+            } else if (sendingMorse) {
+                // Jeżeli transmisja jest aktywna, wysyłaj Morse'a
+                morseLaser.sendMorse(message); // Wyślij kod Morse'a dla wiadomości
+            }
         }
-      }
-      scrollText(); // Kontynuowanie przewijania tekstu na LCD
+      
+        scrollText(); // Kontynuowanie przewijania tekstu na LCD
     }
     client.stop(); // Zamykanie połączenia po rozłączeniu klienta
     messageToScroll = "Disconnected";
