@@ -8,6 +8,8 @@ public:
     MorseLaser(int laserPin, unsigned int dotLength = 50);
     void sendMorse(const String &text);
     void setDotLength(unsigned int length);
+    unsigned int getDotLength();
+    void laserOff();
 private:
     int _laserPin;
     unsigned int _dotLength;

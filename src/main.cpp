@@ -75,7 +75,8 @@ void loop() {
         messageToScroll = "Connected";
         scrollText();
         bool sendingMorse = false; // Flaga sygnalizująca, czy trwa wysyłanie Morse'a
-
+        morseLaser.laserOff();
+        
     while(client.connected()) {
         if(client.available()) {
             String message = client.readStringUntil('\n'); // Odbieranie danych
@@ -94,7 +95,7 @@ void loop() {
                 sendingMorse = true;
                 lcd.clear();  // Czyść LCD przed wyświetleniem nowej wiadomości
                 messageToScroll = "Start Morse TX"; // Wyświetl komunikat o starcie
-             morseLaser.sendMorse(message);
+                morseLaser.sendMorse(message);
 
             } else if (message == "stop") {
 
@@ -106,6 +107,7 @@ void loop() {
             } else if (sendingMorse) {
                 // Jeżeli transmisja jest aktywna, wysyłaj Morse'a
                 morseLaser.sendMorse(message); // Wyślij kod Morse'a dla wiadomości
+                delay(7*morseLaser.getDotLength());
             }
         }
       
