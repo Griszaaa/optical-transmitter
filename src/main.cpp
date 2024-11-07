@@ -43,7 +43,7 @@ void setup() {
     lcd.setCursor(0, 1);
     lcd.print("Port: ");
     lcd.print(server.port());
-}
+}      
 
 void scrollText() {
     unsigned long currentMillis = millis(); // Aktualny czas
@@ -75,7 +75,7 @@ void loop() {
         messageToScroll = "Connected";
         scrollText();
         bool sendingMorse = false; // Flaga sygnalizująca, czy trwa wysyłanie Morse'a
-        morseLaser.laserOff();
+        morseLaser.laserOff(); // Wyłączanie lasera po połączeniu klienta
         
     while(client.connected()) {
         if(client.available()) {

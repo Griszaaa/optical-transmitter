@@ -51,7 +51,7 @@ MorseLaser::MorseLaser(int laserPin, unsigned int dotLength) {
 // Funkcja do wysyłania tekstu jako kod Morse'a
 void MorseLaser::sendMorse(const String &text) {
     for (unsigned int i = 0; i < text.length(); i++) {
-        sendChar(toupper(text[i])); // Wysyłanie każdego znaku
+        sendChar(text[i]); // Wysyłanie każdego znaku
         delay(_dotLength * 3);      // Przerwa między literami
     }
 }
@@ -94,8 +94,8 @@ void MorseLaser::sendChar(char c) {
         return;
     }
     
-    if (c >= 'A' && c <= 'Z') {
-        const char* morse = morseCode[c - 'A'];
+    if (c >= 'a' && c <= 'z') {
+        const char* morse = morseCode[c - 'a'];
         for (unsigned int i = 0; i < strlen(morse); i++) {
         if (morse[i] == '.') {
             sendDot();
