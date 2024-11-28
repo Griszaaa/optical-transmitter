@@ -28,6 +28,7 @@ const long scrollInterval = 450; // Interwał przewijania (450 ms)
 
 void setup() {
     // Uruchomienie servera w trybie Access Point
+    
     WiFi.softAP(ssid, password);  // Tryb Access Point
     server.begin();
 
@@ -110,10 +111,11 @@ void loop() {
                 delay(7*morseLaser.getDotLength());
             }
         }
-      
+
         scrollText(); // Kontynuowanie przewijania tekstu na LCD
     }
     client.stop(); // Zamykanie połączenia po rozłączeniu klienta
+    lcd.clear();
     messageToScroll = "Disconnected";
     scrollText();
   }

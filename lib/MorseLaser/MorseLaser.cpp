@@ -2,42 +2,43 @@
 
 // Tablica kodów Morse'a
 const char* morseCode[] = {
-  ".-",   // A
-  "-...", // B
-  "-.-.", // C
-  "-..",  // D
-  ".",    // E
-  "..-.", // F
-  "--.",  // G
-  "....", // H
-  "..",   // I
-  ".---", // J
-  "-.-",  // K
-  ".-..", // L
-  "--",   // M
-  "-.",   // N
-  "---",  // O
-  ".--.", // P
-  "--.-", // Q
-  ".-.",  // R
-  "...",  // S
-  "-",    // T
-  "..-",  // U
-  "...-", // V
-  ".--",  // W
-  "-..-", // X
-  "-.--", // Y
-  "--..", // Z
-  "-----",// 0
-  ".----",// 1
-  "..---",// 2
-  "...--",// 3
-  "....-",// 4
-  ".....",// 5
-  "-....",// 6
-  "--...",// 7
-  "---..",// 8
-  "----." // 9
+    ".-",   // A
+    "-...", // B
+    "-.-.", // C
+    "-..",  // D
+    ".",    // E
+    "..-.", // F
+    "--.",  // G
+    "....", // H
+    "..",   // I
+    ".---", // J
+    "-.-",  // K
+    ".-..", // L
+    "--",   // M
+    "-.",   // N
+    "---",  // O
+    ".--.", // P
+    "--.-", // Q
+    ".-.",  // R
+    "...",  // S
+    "-",    // T
+    "..-",  // U
+    "...-", // V
+    ".--",  // W
+    "-..-", // X
+    "-.--", // Y
+    "--..", // Z
+    "-----",// 0
+    ".----",// 1
+    "..---",// 2
+    "...--",// 3
+    "....-",// 4
+    ".....",// 5
+    "-....",// 6
+    "--...",// 7
+    "---..",// 8
+    "----.", // 9
+    ".-.-." // koniec wiadomosci '/'
 };
 
 // Konstruktor inicjujący pin diody i długość kropki
@@ -52,7 +53,9 @@ MorseLaser::MorseLaser(int laserPin, unsigned int dotLength) {
 void MorseLaser::sendMorse(const String &text) {
     for (unsigned int i = 0; i < text.length(); i++) {
         sendChar(text[i]); // Wysyłanie każdego znaku
-        delay(_dotLength * 3);      // Przerwa między literami
+        if (text[i] != ' ') {
+            delay(_dotLength * 3); // Przerwa między literami
+        }
     }
 }
 
@@ -109,6 +112,15 @@ void MorseLaser::sendChar(char c) {
             if (morse[i] == '.') {
                 sendDot();
             } else if (morse[i] == '-') {
+                sendDash();
+            }
+        }
+    } else if (c == '/') {
+        const char* morse = morseCode[36];
+        for (unsigned int i = 0; i < strlen(morse); i++) {
+            if (morse[i] == '.') {
+                sendDot();
+            } else if(morse[i] == '-') {
                 sendDash();
             }
         }
