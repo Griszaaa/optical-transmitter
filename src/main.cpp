@@ -87,18 +87,18 @@ void loop() {
             lcd.clear();
             
             // Wyświetlanie wiadomości na LCD bez względu na transmisję Morse'a
-            if(message != "start" || message != "stop") messageToScroll = message;
+            if(message != "start/" || message != "stop/") messageToScroll = message;
             scrollIndex = 0; // Zresetowanie indeksu przewijania
             scrollText(); // Wyświetlenie wiadomości na LCD
 
-            if(message == "start") {
+            if(message == "start/") {
 
                 sendingMorse = true;
                 lcd.clear();  // Czyść LCD przed wyświetleniem nowej wiadomości
                 messageToScroll = "Start Morse TX"; // Wyświetl komunikat o starcie
                 morseLaser.sendMorse(message);
 
-            } else if (message == "stop") {
+            } else if (message == "stop/") {
 
                 sendingMorse = false;
                 lcd.clear();  // Czyść LCD przed wyświetleniem nowej wiadomości

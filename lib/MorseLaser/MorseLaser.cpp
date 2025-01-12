@@ -38,7 +38,17 @@ const char* morseCode[] = {
     "--...",// 7
     "---..",// 8
     "----.", // 9
-    ".-.-." // koniec wiadomosci '/'
+    ".-.-.", // koniec wiadomosci '/'
+    ".-.-.-", // . (kropka)
+    "--..--", // , (przecinek)
+    "..--..", // ? (znak zapytania)
+    "-....-", // - (myślnik)
+    ".-..-.", // " (cudzysłów)
+    ".----.", // ' (apostrof)
+    "-.--.", // ( (nawias otwierający)
+    "-.--.-", // ) (nawias zamykający)
+    "---...", // : (dwukropek)
+    "-.-.--", // ! (wykrzyknik)
 };
 
 // Konstruktor inicjujący pin diody i długość kropki
@@ -97,7 +107,8 @@ void MorseLaser::sendChar(char c) {
         return;
     }
     
-    if (c >= 'a' && c <= 'z') {
+    if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')) {
+        c = tolower(c);
         const char* morse = morseCode[c - 'a'];
         for (unsigned int i = 0; i < strlen(morse); i++) {
         if (morse[i] == '.') {
@@ -117,6 +128,96 @@ void MorseLaser::sendChar(char c) {
         }
     } else if (c == '/') {
         const char* morse = morseCode[36];
+        for (unsigned int i = 0; i < strlen(morse); i++) {
+            if (morse[i] == '.') {
+                sendDot();
+            } else if(morse[i] == '-') {
+                sendDash();
+            }
+        }
+    } else if (c == '.') {
+        const char* morse = morseCode[37];
+        for (unsigned int i = 0; i < strlen(morse); i++) {
+            if (morse[i] == '.') {
+                sendDot();
+            } else if(morse[i] == '-') {
+                sendDash();
+            }
+        }
+    } else if (c == ',') {
+        const char* morse = morseCode[38];
+        for (unsigned int i = 0; i < strlen(morse); i++) {
+            if (morse[i] == '.') {
+                sendDot();
+            } else if(morse[i] == '-') {
+                sendDash();
+            }
+        }
+    } else if (c == '?') {
+        const char* morse = morseCode[39];
+        for (unsigned int i = 0; i < strlen(morse); i++) {
+            if (morse[i] == '.') {
+                sendDot();
+            } else if(morse[i] == '-') {
+                sendDash();
+            }
+        }
+    } else if (c == '-') {
+        const char* morse = morseCode[40];
+        for (unsigned int i = 0; i < strlen(morse); i++) {
+            if (morse[i] == '.') {
+                sendDot();
+            } else if(morse[i] == '-') {
+                sendDash();
+            }
+        }
+    } else if (c == '"') {
+        const char* morse = morseCode[41];
+        for (unsigned int i = 0; i < strlen(morse); i++) {
+            if (morse[i] == '.') {
+                sendDot();
+            } else if(morse[i] == '-') {
+                sendDash();
+            }
+        }
+    } else if (c == '\'') {
+        const char* morse = morseCode[42];
+        for (unsigned int i = 0; i < strlen(morse); i++) {
+            if (morse[i] == '.') {
+                sendDot();
+            } else if(morse[i] == '-') {
+                sendDash();
+            }
+        }
+    } else if (c == '(') {
+        const char* morse = morseCode[43];
+        for (unsigned int i = 0; i < strlen(morse); i++) {
+            if (morse[i] == '.') {
+                sendDot();
+            } else if(morse[i] == '-') {
+                sendDash();
+            }
+        }
+    } else if (c == ')') {
+        const char* morse = morseCode[44];
+        for (unsigned int i = 0; i < strlen(morse); i++) {
+            if (morse[i] == '.') {
+                sendDot();
+            } else if(morse[i] == '-') {
+                sendDash();
+            }
+        }
+    } else if (c == ':') {
+        const char* morse = morseCode[45];
+        for (unsigned int i = 0; i < strlen(morse); i++) {
+            if (morse[i] == '.') {
+                sendDot();
+            } else if(morse[i] == '-') {
+                sendDash();
+            }
+        }
+    } else if (c == '!') {
+        const char* morse = morseCode[46];
         for (unsigned int i = 0; i < strlen(morse); i++) {
             if (morse[i] == '.') {
                 sendDot();
