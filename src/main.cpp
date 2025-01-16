@@ -37,7 +37,7 @@ void setup() {
     lcd.setCursor(0, 0);
     lcd.clear();
 
-    // Wyświetlenie adresu IP Access Pointa
+    // Wyświetlenie adresu IP Access Pointa i portu 
     lcd.print("IP: ");
     lcd.print(WiFi.softAPIP().toString().substring(0, 11));
 
